@@ -39,16 +39,12 @@ public class Participante {
 		boolean yaLaPoseeParticipante = false;
 		for (Figurita figuritaActual: figuritasObtenidas) {
 			if(figurita.compareTo(figuritaActual) == 0)
-				yaLaPoseeParticipante = true;
-			
-		}
-		
+				yaLaPoseeParticipante = true;			
+		}		
 		if (yaLaPoseeParticipante) {
-			figuritasRepetidas.add(figurita);
-			
+			figuritasRepetidas.add(figurita);			
 			return;
-		}
-		
+		}		
 		figuritasObtenidas.add(figurita);
 	}
 	
@@ -95,7 +91,8 @@ public class Participante {
 	}
 	
 	public Figurita buscarFiguritaMedianteCodigo(int codigoDeFigurita) {
-		for (Figurita figurita: figuritasObtenidas) 
+		
+for (Figurita figurita: figuritasObtenidas) 
 			if (figurita.getNumero() == codigoDeFigurita)
 				return figurita;
 		
@@ -103,8 +100,8 @@ public class Participante {
 			if (figurita.getNumero() == codigoDeFigurita)
 				return figurita;		
 		
-		return null;
-	}
+		return null;			
+		}
 	
 	public Figurita encontrarFiguritaRepetidaMenorOIgualEnValor(int valor) {
 		Figurita figuritaEncontrada = null;

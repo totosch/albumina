@@ -26,8 +26,7 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 		for (Participante p : participantes) {
 			if (dni == p.getDni())
 				participante = p;
-		}
-		
+		}		
 		return participante;
 	}
 	
@@ -126,7 +125,7 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 		
 		int rangoParaElParticipante = random.nextInt(4) + 1;
 		int rangoParaElSorteo = random.nextInt(4) + 1;
-		
+				
 		if (rangoParaElSorteo == rangoParaElParticipante) {
 			String[] premios = Fabrica.solicitudAFabrica.generarPremiosParaSorteoInstantaneo();
 			int indiceParaElegirSorteo = random.nextInt(premios.length);
@@ -162,22 +161,29 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 		
 		Figurita figuritaAIntercambiar = participante.buscarFiguritaMedianteCodigo(codFigurita);
 		
-		if (figuritaAIntercambiar == null)
-			throw new RuntimeException("El participante no posee la figurita");
+		if (participante.getFiguritasObtenidas().size() + participante.getFiguritasRepetidas().size() == 0) {
+			return false;
+		}
 		
-		System.out.println(figuritaAIntercambiar);
+		if (figuritaAIntercambiar == null)
+			return false;
+		
+		if(participante.getAlbumComprado().obtenerFiguritasPegadas().size() == 0)
+				return false;
 		
 		int valorDeFigurita = figuritaAIntercambiar.calcularValorFinal();
 		
 		Figurita figuritaEncontrada = null;
 		Participante participanteEncontrado = null;
-		int numeroDeParticipanteActual = 0;
-		
-		while(figuritaEncontrada.equals(null)) {
-			participanteEncontrado = participantesConMismoAlbum.get(numeroDeParticipanteActual);
-			figuritaEncontrada = participante.encontrarFiguritaRepetidaMenorOIgualEnValor(valorDeFigurita);
+	
+					
+		for (Participante p : participantesConMismoAlbum) {			
+			figuritaEncontrada = p.encontrarFiguritaRepetidaMenorOIgualEnValor(valorDeFigurita);
 			
-			numeroDeParticipanteActual++;
+			if (figuritaEncontrada != null) {
+				participanteEncontrado = p;
+				break;
+			}
 		}
 		
 		if (figuritaEncontrada.equals(null))
@@ -206,7 +212,7 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 		int codigoDeFiguritaRepetida = this.buscarFiguritaRepetida(dni);
 		
 		if (codigoDeFiguritaRepetida == -1)
-			throw new RuntimeException("El participante no tiene figuritas repetidas");
+			return false;
 		
 		return intercambiar(dni, codigoDeFiguritaRepetida);
 	}
@@ -226,9 +232,7 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 		this.verificarParticipanteRegistrado(dni);
 		
 		Participante participante = this.obtenerParticipanteConDni(dni);
-		
-		System.out.println(participante.obtenerFiguritasPegadasDeAlbum());
-		
+				
 		if (!llenoAlbum(dni)){
 			throw new RuntimeException("El participante no completo su album");
 		}
@@ -241,6 +245,7 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 			return "Te ganaste una pelota!";
 		}		
 		return "Te ganaste una pelota y un viaje!";
+		
 	}
 
 	@Override
@@ -257,7 +262,7 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 	@Override
 	public List<String> participantesQueCompletaronElPais(String nombrePais) {	
 		List<String> participantesQueCompletaronElPais = new ArrayList<String>();
-		
+			
 		for (Participante participante: participantes)
 			if (participante.completoPais(nombrePais))
 				participantesQueCompletaronElPais.add(participante.toString());
@@ -265,19 +270,13 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 		return participantesQueCompletaronElPais;
 	}
 	
-	/*@Override
+	@Override
 	public String toString() {
 		StringBuilder res = new StringBuilder();
 		res.append("AlbumDelMundial [Participantes registrados: ");
-		res.append(participantes.size());
-		
-		res.append(", Códigos redimidos: ");
-		res.append(codigosPromocionalesRedimidos.size());
-		
-		res.append(", Sorteos redimidos: ");
-		res.append(sorteosRedimidos.size());
-		
+		res.append(participantes.size());	
 		res.append("]");
 		return res.toString();
-	}*/
+	}
+	
 }	
