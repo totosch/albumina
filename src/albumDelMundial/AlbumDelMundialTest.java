@@ -50,12 +50,12 @@ public class AlbumDelMundialTest {
 		sistema.registrarParticipante(1111, "Roberto", TIPO_TRADICIONAL);
 	}
 	
-	/*// Comprar figuritas
+	// Comprar figuritas
 	
 	@Test(expected=RuntimeException.class)
-	public void t03_comprarFiguritasConParticipanteNoRegistrado_GeneraError() {
+	public void t03_comprarFiguritasConParticipanteNoRegistrado_GeneraError() throws Exception {
 		sistema.comprarFiguritas(5555);
-	}*/
+	}
 	
 	@Test(expected=RuntimeException.class)
 	public void t04_comprarFiguritasTop10ConAlbumWeb_GeneraError() {
@@ -118,12 +118,12 @@ public class AlbumDelMundialTest {
 		assertEquals(0, figuritasPegadas.size());
 	}
 	
-	/*// Lleno Album
+	// Lleno Album
 	
 	@Test
-	public void t14_llenoAlbumConParticipanteNuevo_DevuelveFalse() {
+	public void t14_llenoAlbumConParticipanteNuevo_DevuelveFalse() throws Exception {
 		assertFalse(sistema.llenoAlbum(dniConAlbumWeb));
-	}*/
+	}
 	
 	// Consultar por participante puntual
 	

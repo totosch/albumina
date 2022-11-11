@@ -1,11 +1,11 @@
 package albumDelMundial;
 
+import java.util.HashMap;
+
 public class AlbumTradicional extends Album {
-	private int lugaresParaPegar;
 	
-	public AlbumTradicional (String nombreDeUsuario, int codigo, int lugaresParaPegar) {
-		super(nombreDeUsuario, codigo);
+	public AlbumTradicional (String nombreDeUsuario, int codigo, int lugaresParaPegar, HashMap<String, Integer> seccionesDelAlbum) {
+		super(nombreDeUsuario, codigo, seccionesDelAlbum);
 		
-		this.lugaresParaPegar = lugaresParaPegar;
 	}
 }

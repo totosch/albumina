@@ -5,23 +5,25 @@ import java.util.HashSet;
 import java.util.List;
 
 public class Participante {
-	private int dni;
-	private String nombreDeUsuario;
-	private HashSet<Figurita> figuritasObtenidas;
-	private ArrayList<Figurita> figuritasRepetidas;
-	private Album albumComprado;
-	private String tipoDeAlbumComprado;
-	private boolean haUtilizadoCodigoPromocional;
+    private int dni;
+    private String nombreDeUsuario;
+    private HashSet<Figurita> figuritasObtenidas;
+    private ArrayList<Figurita> figuritasRepetidas;
+    private Album albumComprado;
+    private String tipoDeAlbumComprado;
+    private boolean haUtilizadoCodigoPromocional;
 
-	public Participante(int dni, String nombreDeUsuario, String tipoDeAlbum) {
-		this.dni = dni;
-		this.nombreDeUsuario = nombreDeUsuario;
+    public Participante(int dni, String nombreDeUsuario, String tipoDeAlbum) {
+        this.dni = dni;
+        this.nombreDeUsuario = nombreDeUsuario;
+        this.figuritasObtenidas = new HashSet<Figurita>();
+        this.figuritasRepetidas = new ArrayList<Figurita>();
 
-		this.albumComprado = Album.obtenerAlbumPorSuTipo(tipoDeAlbum, nombreDeUsuario);
-		
-		this.tipoDeAlbumComprado = tipoDeAlbum;
-		this.haUtilizadoCodigoPromocional = false;
-	}
+        this.albumComprado = Album.generarAlbumPorSuTipo(tipoDeAlbum, nombreDeUsuario);
+        
+        this.tipoDeAlbumComprado = tipoDeAlbum;
+        this.haUtilizadoCodigoPromocional = false;
+    }
 	
 	public int obtenerCodigoDeAlbum() {
 		return this.albumComprado.obtenerCodigo();

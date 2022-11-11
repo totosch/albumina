@@ -31,6 +31,7 @@ public class Fabrica {
 		balonYPaisPorMundialTop10 = generarPaisesPorMundial();
 		ranking = generarRanking();
 		premiosInstantaneos = generarPremiosParaSorteoInstantaneo();
+		
 	}
 	
 	
@@ -48,23 +49,55 @@ public class Fabrica {
 		Oro
 	}
 
-	Album crearAlbumWeb() {
-		Random ran = new Random();
+    Album crearAlbumWeb(String nombreDeUsuario) {
+        Album albumWeb = new AlbumWeb(
+                nombreDeUsuario, 
+                num.nextInt(), 
+                num.nextInt(), 
+                this.generarSeccionesDelAlbum()
+        );
+        
+        return albumWeb;
+    }
 
-		int codigo = ran.nextInt(1000, 100000);
-		Album albumWeb = new AlbumWeb();
-		throw new RuntimeException("A Implementar");
-	}
+    Album crearAlbumExtendido(String nombreDeUsuario) {
+        Album albumExtendido = new AlbumExtendido(
+                nombreDeUsuario, 
+                num.nextInt(), 
+                num.nextInt(),
+                this.generarSeccionesDelAlbumExtendido()
+        );
+        
+        return albumExtendido;
+    }
 
-	Album crearAlbumExtendido() {
-		Album albumExtendido = new AlbumExtendido();
-        throw new RuntimeException("A Implementar");
-	}
-
-	Album crearAlbumTradicional() {
-		Album albumTradicional = new AlbumTradicional();
-		throw new RuntimeException("A Implementar");
-	}
+    Album crearAlbumTradicional(String nombreDeUsuario) {
+        Album albumTradicional = new AlbumTradicional(
+                nombreDeUsuario, 
+                num.nextInt(), 
+                num.nextInt(), 
+                this.generarSeccionesDelAlbum()
+        );
+        
+        return albumTradicional;
+        
+    }
+    
+    HashMap<String, Integer> generarSeccionesDelAlbum() {
+        HashMap<String, Integer> seccionesDelAlbum = new HashMap<String, Integer>();
+        for (String pais: paisesParticipantes)
+            seccionesDelAlbum.put(pais, 0);
+        
+        return seccionesDelAlbum;
+    }
+    
+    HashMap<String, Integer> generarSeccionesDelAlbumExtendido() {
+        HashMap<String, Integer> seccionesDelAlbum = this.generarSeccionesDelAlbum();
+        
+        seccionesDelAlbum.put("TOP 10", 0);
+        
+        return seccionesDelAlbum;
+    }
 
 	List<Figurita> generarSobre(int cantidadDeFiguritas) {
 		int cantidadTotalDeJugadores = this.lugaresPorPais * equiposPorMundial;
