@@ -10,4 +10,14 @@ public class FiguritaTop10 extends Figurita {
 		
 		this.balonGanado = balonGanado; 
 	}
+	
+	public int calcularValorFinal(TipoDeBalon balonGanado) {
+		
+		if (balonGanado == TipoDeBalon.Oro)
+			return (super.calcularValorFinal() * 100)/ 20;			
+		
+		return (super.calcularValorFinal() * 100)/ 10;	
+		
+		
+	}
 }

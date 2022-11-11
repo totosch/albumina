@@ -49,15 +49,20 @@ public class Fabrica {
 	}
 
 	Album crearAlbumWeb() {
+		Random ran = new Random();
+
+		int codigo = ran.nextInt(1000, 100000);
 		Album albumWeb = new AlbumWeb();
 		throw new RuntimeException("A Implementar");
 	}
 
 	Album crearAlbumExtendido() {
+		Album albumExtendido = new AlbumExtendido();
         throw new RuntimeException("A Implementar");
 	}
 
 	Album crearAlbumTradicional() {
+		Album albumTradicional = new AlbumTradicional();
 		throw new RuntimeException("A Implementar");
 	}
 

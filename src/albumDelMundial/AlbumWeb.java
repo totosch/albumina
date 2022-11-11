@@ -7,6 +7,5 @@ public class AlbumWeb extends Album {
 		super(nombreDeUsuario, codigo);
 		
 		this.codigoPromocional = codigoPromocional;
-	}
-	
+	}	
 }

@@ -25,8 +25,8 @@ public class Figurita {
 	}
 
 	public int calcularValorFinal() {
-		return Fabrica.solicitudAFabrica.calcularValorBase(this.pais, this.numero);
-	}
+			return Fabrica.solicitudAFabrica.calcularValorBase(this.pais, this.numero);
+		}
 	
 	@Override
 	public String toString() {
@@ -62,4 +62,5 @@ public class Figurita {
 	public String getPais() {
 		return pais;
 	}
+
 }
