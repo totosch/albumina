@@ -19,8 +19,10 @@ public class Fabrica {
 	private Map<String, String[]> balonYPaisPorMundialTop10;
 	private static Map<String, Integer> ranking;
 	private int equiposPorMundial;
+	public int totalDeFiguritasParaPegar;	
 	
 	static public Fabrica solicitudAFabrica = new Fabrica();
+	
 
 	private Fabrica() {
 		num = new Random(System.currentTimeMillis());
@@ -31,7 +33,7 @@ public class Fabrica {
 		balonYPaisPorMundialTop10 = generarPaisesPorMundial();
 		ranking = generarRanking();
 		premiosInstantaneos = generarPremiosParaSorteoInstantaneo();
-		
+		totalDeFiguritasParaPegar = lugaresPorPais * equiposPorMundial;
 	}
 	
 	
@@ -49,63 +51,48 @@ public class Fabrica {
 		Oro
 	}
 
-    Album crearAlbumWeb(String nombreDeUsuario) {
-        Album albumWeb = new AlbumWeb(
-                nombreDeUsuario, 
-                num.nextInt(), 
-                num.nextInt(), 
-                this.generarSeccionesDelAlbum()
-        );
-        
-        return albumWeb;
-    }
+	Album crearAlbumWeb(String nombreDeUsuario) {
+		Album albumWeb = new AlbumWeb(
+				nombreDeUsuario, 
+				Math.abs(num.nextInt()), 
+				Math.abs(num.nextInt()), 
+				this.generarSeccionesDelAlbum(),
+				this.totalDeFiguritasParaPegar
+		);
+		
+		return albumWeb;
+	}
 
-    Album crearAlbumExtendido(String nombreDeUsuario) {
-        Album albumExtendido = new AlbumExtendido(
-                nombreDeUsuario, 
-                num.nextInt(), 
-                num.nextInt(),
-                this.generarSeccionesDelAlbumExtendido()
-        );
-        
-        return albumExtendido;
-    }
+	Album crearAlbumExtendido(String nombreDeUsuario) {
+		Album albumExtendido = new AlbumExtendido(
+				nombreDeUsuario, 
+				Math.abs(num.nextInt()),
+				this.generarSeccionesDelAlbumExtendido(),
+				totalDeFiguritasParaPegar
+		);
+		
+		return albumExtendido;
+	}
 
-    Album crearAlbumTradicional(String nombreDeUsuario) {
-        Album albumTradicional = new AlbumTradicional(
-                nombreDeUsuario, 
-                num.nextInt(), 
-                num.nextInt(), 
-                this.generarSeccionesDelAlbum()
-        );
-        
-        return albumTradicional;
-        
-    }
-    
-    HashMap<String, Integer> generarSeccionesDelAlbum() {
-        HashMap<String, Integer> seccionesDelAlbum = new HashMap<String, Integer>();
-        for (String pais: paisesParticipantes)
-            seccionesDelAlbum.put(pais, 0);
-        
-        return seccionesDelAlbum;
-    }
-    
-    HashMap<String, Integer> generarSeccionesDelAlbumExtendido() {
-        HashMap<String, Integer> seccionesDelAlbum = this.generarSeccionesDelAlbum();
-        
-        seccionesDelAlbum.put("TOP 10", 0);
-        
-        return seccionesDelAlbum;
-    }
+	Album crearAlbumTradicional(String nombreDeUsuario) {
+		Album albumTradicional = new AlbumTradicional(
+				nombreDeUsuario, 
+				Math.abs(num.nextInt()), 
+				this.generarSeccionesDelAlbum(),
+				totalDeFiguritasParaPegar
+		);
+		
+		return albumTradicional;
+		
+	}
 
 	List<Figurita> generarSobre(int cantidadDeFiguritas) {
-		int cantidadTotalDeJugadores = this.lugaresPorPais * equiposPorMundial;
+		int cantidadTotalDeJugadores = this.lugaresPorPais * this.equiposPorMundial;
 		Random random = new Random();
 		ArrayList<Figurita> figuritas = new ArrayList<Figurita>(cantidadDeFiguritas);
 
 		for (int i = 0; i < cantidadDeFiguritas; i++) {
-			int numeroAleatorio = random.nextInt(cantidadTotalDeJugadores);
+			int numeroAleatorio = random.nextInt(cantidadTotalDeJugadores) + 1;
 			figuritas.add(new Figurita(numeroAleatorio, this.obtenerPaisSegunNumeroDeFigurita(numeroAleatorio)));
 		}
 
@@ -113,12 +100,12 @@ public class Fabrica {
 	}		
 
 	List<Figurita> generarSobreTop10(int cantidadDeFiguritas) {
-		int cantidadTotalDeJugadores = this.lugaresPorPais * equiposPorMundial;
+		int cantidadTotalDeJugadores = 20;
 		Random random = new Random();
 		ArrayList<Figurita> figuritas = new ArrayList<Figurita>(cantidadDeFiguritas);
 
 		for (int i = 0; i < cantidadDeFiguritas; i++) {
-			int numeroAleatorio = random.nextInt(cantidadTotalDeJugadores);
+			int numeroAleatorio = random.nextInt(cantidadTotalDeJugadores) + 1;
 			figuritas.add(
 				new FiguritaTop10(numeroAleatorio, 
 				this.obtenerPaisSegunNumeroDeFigurita(numeroAleatorio),
@@ -129,10 +116,16 @@ public class Fabrica {
 		return figuritas;
 	}
 	
-	private String obtenerPaisSegunNumeroDeFigurita(int numeroDeFigurita) {
-		return paisesParticipantes[numeroDeFigurita % 12];
+	public String obtenerPaisSegunNumeroDeFigurita(int numeroDeFigurita) {
+		int indiceParaPais = numeroDeFigurita / 12;
+		indiceParaPais = indiceParaPais < 32 ? indiceParaPais : indiceParaPais - 1;
+		
+		return paisesParticipantes[indiceParaPais];
 	}
-
+	
+	public int obtenerTotalDeFiguritasParaPegar() {
+		return totalDeFiguritasParaPegar;
+	}
 
 	///////////////////////////////////////////////////////
 	///////////// METODOS FACILITADOS POR LA CATEDRA //////
@@ -145,7 +138,22 @@ public class Fabrica {
 		return getRanking().get(pais) + numero;
 	}
 	
-
+	HashMap<String, Integer> generarSeccionesDelAlbum() {
+		HashMap<String, Integer> seccionesDelAlbum = new HashMap<String, Integer>();
+		for (String pais: paisesParticipantes)
+			seccionesDelAlbum.put(pais, 0);
+		
+		return seccionesDelAlbum;
+	}
+	
+	HashMap<String, Integer> generarSeccionesDelAlbumExtendido() {
+		HashMap<String, Integer> seccionesDelAlbum = this.generarSeccionesDelAlbum();
+		
+		seccionesDelAlbum.put("TOP 10", 0);
+		
+		return seccionesDelAlbum;
+	}
+	
 	public String[] generarPremiosParaSorteoInstantaneo() {
 		return new String[]{
 				"Una pelota","1 Sobre Gratis", "Una camiseta"

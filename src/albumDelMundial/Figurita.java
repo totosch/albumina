@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class Figurita {
+public class Figurita implements Comparable {
 	private int numero;
 
 	private String nombreDeJugador;
@@ -25,19 +25,19 @@ public class Figurita {
 	}
 
 	public int calcularValorFinal() {
-			return Fabrica.solicitudAFabrica.calcularValorBase(this.pais, this.numero);
-		}
+		return Fabrica.solicitudAFabrica.calcularValorBase(this.pais, this.numero);
+	}
 	
 	@Override
 	public String toString() {
-		return this.pais + "" + this.numero;
+		return this.pais + " " + this.numero;
 	}
 
 	public static List<Figurita> generarFiguritas(int cantidadDeFiguritas, TipoDeFigurita tipo) {
 		Random random = new Random();
 		List<Figurita> figuritas = null;
 		
-		if (tipo == TipoDeFigurita.Top10)
+		if (tipo != TipoDeFigurita.Top10)
 			figuritas = Fabrica.solicitudAFabrica.generarSobre(cantidadDeFiguritas);
 		else 
 			figuritas = Fabrica.solicitudAFabrica.generarSobreTop10(cantidadDeFiguritas);
@@ -54,7 +54,15 @@ public class Figurita {
 		return muestraDeFiguritas;
 	}
 	
-	
+	public boolean incluidaEnListaDeFiguritas(List<Figurita> figuritas) {
+		for (Figurita figurita: figuritas) {
+			System.out.println(this.compareTo(figurita));
+			if (this.compareTo(figurita) == 0)
+				return false;			
+		}
+		
+		return true;
+	}
 	
 	public int getNumero() {
 		return numero;
@@ -63,4 +71,15 @@ public class Figurita {
 		return pais;
 	}
 
+	@Override
+	public int compareTo(Object figuritaAComparar) {
+		Figurita figurita = (Figurita) figuritaAComparar;
+		
+		if (this.numero > figurita.numero)
+			return 1;
+		if (this.numero < figurita.numero)
+			return -1;
+		
+		return 0;
+	}
 }

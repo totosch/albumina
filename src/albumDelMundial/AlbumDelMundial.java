@@ -122,15 +122,18 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 			throw new RuntimeException("Ya utilizaste tu codigo promocional");
 		}
 		
-		Random numRandomParaElParticipante = new Random();
-		Random numRandomParaElSorteo = new Random();
+		Random random = new Random();
 		
-		int rangoParaElParticipante = numRandomParaElParticipante.nextInt(4)+1;
-		int rangoParaElSorteo = numRandomParaElParticipante.nextInt(4)+1;
+		int rangoParaElParticipante = random.nextInt(4) + 1;
+		int rangoParaElSorteo = random.nextInt(4) + 1;
 		
 		if (rangoParaElSorteo == rangoParaElParticipante) {
-			return darPremio(participante.getDni());
+			String[] premios = Fabrica.solicitudAFabrica.generarPremiosParaSorteoInstantaneo();
+			int indiceParaElegirSorteo = random.nextInt(premios.length);
+			
+			return premios[indiceParaElegirSorteo];
 		}		
+		
 		return "Segui participando!";
 	}
 
@@ -143,6 +146,7 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 		if (participante.tieneFiguritasRepetidas()) {
 			return participante.obtenerNumeroDeFiguritaRepetida(1);
 		}		
+		
 		return -1;
 	}
 
@@ -156,7 +160,12 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 		
 		ArrayList<Participante> participantesConMismoAlbum = this.devolverParticipantesConMismoAlbum(tipoDeAlbum);
 		
-		Figurita figuritaAIntercambiar = participante.buscarFiguritaRepetidaMedianteCodigo(codFigurita);
+		Figurita figuritaAIntercambiar = participante.buscarFiguritaMedianteCodigo(codFigurita);
+		
+		if (figuritaAIntercambiar == null)
+			throw new RuntimeException("El participante no posee la figurita");
+		
+		System.out.println(figuritaAIntercambiar);
 		
 		int valorDeFigurita = figuritaAIntercambiar.calcularValorFinal();
 		
@@ -172,13 +181,11 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 		}
 		
 		if (figuritaEncontrada.equals(null))
-			return false;	
+			return false;
 		
-		// complicado, falta implementar logica de intercambio
-		// repensar como hacer para intercambiar, no
-		// entiendo si de una se intercambian figuritas repetidas o en este caso,
-		// serian obtenidas.
-		
+		participante.entregarFigurita(figuritaAIntercambiar, participanteEncontrado);
+		participanteEncontrado.entregarFigurita(figuritaAIntercambiar, participante);
+			
 		return true;
 	}
 	
@@ -194,8 +201,14 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 
 	@Override
 	public boolean intercambiarUnaFiguritaRepetida(int dni) {
-		// TODO Auto-generated method stub
-		return false;
+		this.verificarParticipanteRegistrado(dni);
+		
+		int codigoDeFiguritaRepetida = this.buscarFiguritaRepetida(dni);
+		
+		if (codigoDeFiguritaRepetida == -1)
+			throw new RuntimeException("El participante no tiene figuritas repetidas");
+		
+		return intercambiar(dni, codigoDeFiguritaRepetida);
 	}
 
 	@Override
@@ -213,6 +226,8 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 		this.verificarParticipanteRegistrado(dni);
 		
 		Participante participante = this.obtenerParticipanteConDni(dni);
+		
+		System.out.println(participante.obtenerFiguritasPegadasDeAlbum());
 		
 		if (!llenoAlbum(dni)){
 			throw new RuntimeException("El participante no completo su album");
@@ -240,15 +255,29 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 	}
 
 	@Override
-	public List<String> participantesQueCompletaronElPais(String nombrePais) {
-				
+	public List<String> participantesQueCompletaronElPais(String nombrePais) {	
 		List<String> participantesQueCompletaronElPais = new ArrayList<String>();
+		
 		for (Participante participante: participantes)
 			if (participante.completoPais(nombrePais))
-				participantesQueCompletaronElPais.add(String.valueOf(participante.getDni()) + ", " + participante.getNombreDeUsuario() + ", " + participante.getAlbumComprado());
+				participantesQueCompletaronElPais.add(participante.toString());
 				
-					
-		
 		return participantesQueCompletaronElPais;
 	}
+	
+	/*@Override
+	public String toString() {
+		StringBuilder res = new StringBuilder();
+		res.append("AlbumDelMundial [Participantes registrados: ");
+		res.append(participantes.size());
+		
+		res.append(", Códigos redimidos: ");
+		res.append(codigosPromocionalesRedimidos.size());
+		
+		res.append(", Sorteos redimidos: ");
+		res.append(sorteosRedimidos.size());
+		
+		res.append("]");
+		return res.toString();
+	}*/
 }	

@@ -8,27 +8,28 @@ public class Album {
 	private int codigo;
 	private String nombreDeUsuario;
 	private HashSet<Figurita> figuritasPegadas;
-    private HashMap<String, Integer> seccionesDelAlbum;
-    
-    public Album(String nombreDeUsuario, int codigo, HashMap<String, Integer> seccionesDelAlbum) {
-        this.nombreDeUsuario = nombreDeUsuario;
-        this.codigo = codigo;
-        this.seccionesDelAlbum = seccionesDelAlbum;
-        this.figuritasPegadas = new HashSet<Figurita>();
-    }
+	private HashMap<String, Integer> seccionesDelAlbum;
+	private int maximoDeFiguritas;
 	
-	private static int TOTAL_DE_FIGURITAS_PARA_PEGAR = 320;
-	
-	public int obtenerCodigo() {
-		return codigo;
+	public Album(
+			String nombreDeUsuario, 
+			int codigo, 
+			HashMap<String, Integer> seccionesDelAlbum,
+			int totalDeFiguritasParaPegar) {
+		this.nombreDeUsuario = nombreDeUsuario;
+		this.codigo = codigo;
+		this.seccionesDelAlbum = seccionesDelAlbum;
+		this.figuritasPegadas = new HashSet<Figurita>();
+		this.maximoDeFiguritas = totalDeFiguritasParaPegar;
 	}
-
+	
+	@Override
+	public String toString() {
+		return "Album nro: " + this.codigo;
+	}
+	
 	public boolean estoyCompletado() {
-		return (figuritasPegadas.size() == TOTAL_DE_FIGURITAS_PARA_PEGAR);
-	}
-	
-	public boolean completoPais() {
-		return false;
+		return figuritasPegadas.size() == this.maximoDeFiguritas;
 	}
 	
 	public static Album generarAlbumPorSuTipo (String tipoDeAlbum, String nombreDeUsuario) {
@@ -50,11 +51,26 @@ public class Album {
 		
 	}
 	
+	public void pegarFigurita(Figurita figurita) {
+		this.figuritasPegadas.add(figurita);
+		String pais = Fabrica.solicitudAFabrica.obtenerPaisSegunNumeroDeFigurita(figurita.getNumero());
+		
+		this.seccionesDelAlbum.put(pais, seccionesDelAlbum.get(pais) + 1);
+	}
+	
 	public HashSet<Figurita> obtenerFiguritasPegadas() {
 		return figuritasPegadas;
 	}
 	
-	public void pegarFigurita(Figurita figurita) {
-		this.figuritasPegadas.add(figurita);
+	public HashMap<String, Integer> obtenerSeccionesDelAlbum() {
+		return this.seccionesDelAlbum;
+	}
+	
+	public int obtenerCodigo() {
+		return codigo;
+	}
+	
+	public boolean completoPais() {
+		return false;
 	}
 }
