@@ -153,39 +153,32 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 	public boolean intercambiar(int dni, int codFigurita) {
 		this.verificarParticipanteRegistrado(dni);
 		
-		Participante participante = this.obtenerParticipanteConDni(dni);
-		
-		String tipoDeAlbum = participante.obtenerTipoDeAlbumComprado();
-		
-		ArrayList<Participante> participantesConMismoAlbum = this.devolverParticipantesConMismoAlbum(tipoDeAlbum);
-		
+		Participante participante = this.obtenerParticipanteConDni(dni);		
+		String tipoDeAlbum = participante.obtenerTipoDeAlbumComprado();		
+		ArrayList<Participante> participantesConMismoAlbum = this.devolverParticipantesConMismoAlbum(tipoDeAlbum);		
 		Figurita figuritaAIntercambiar = participante.buscarFiguritaMedianteCodigo(codFigurita);
 		
-		if (participante.getFiguritasObtenidas().size() + participante.getFiguritasRepetidas().size() == 0) {
+		if (participante.getFiguritasObtenidas().size() + participante.getFiguritasRepetidas().size() == 0)
 			return false;
-		}
+		
+		if(participante.getAlbumComprado().obtenerFiguritasPegadas().size() == 0)
+			return true;		
 		
 		if (figuritaAIntercambiar == null)
 			return false;
 		
-		if(participante.getAlbumComprado().obtenerFiguritasPegadas().size() == 0)
-				return false;
-		
 		int valorDeFigurita = figuritaAIntercambiar.calcularValorFinal();
 		
 		Figurita figuritaEncontrada = null;
-		Participante participanteEncontrado = null;
-	
+		Participante participanteEncontrado = null;	
 					
 		for (Participante p : participantesConMismoAlbum) {			
-			figuritaEncontrada = p.encontrarFiguritaRepetidaMenorOIgualEnValor(valorDeFigurita);
-			
+			figuritaEncontrada = p.encontrarFiguritaRepetidaMenorOIgualEnValor(valorDeFigurita);			
 			if (figuritaEncontrada != null) {
 				participanteEncontrado = p;
 				break;
 			}
-		}
-		
+		}		
 		if (figuritaEncontrada.equals(null))
 			return false;
 		
@@ -210,9 +203,6 @@ public class AlbumDelMundial implements IAlbumDelMundial{
 		this.verificarParticipanteRegistrado(dni);
 		
 		int codigoDeFiguritaRepetida = this.buscarFiguritaRepetida(dni);
-		
-		if (codigoDeFiguritaRepetida == -1)
-			return false;
 		
 		return intercambiar(dni, codigoDeFiguritaRepetida);
 	}
